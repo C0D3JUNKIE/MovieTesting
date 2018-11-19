@@ -26,6 +26,6 @@
     <string name="action_by_most_popular">Sort By Popularity</string>
     <string name="action_refresh">Refresh</string>
 
-    <string name="movie_db_key">1234567890</string>
+    <!--<string name="movie_db_key">1234567890</string>-->
 
 </resources>
