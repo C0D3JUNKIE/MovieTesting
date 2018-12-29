@@ -3,12 +3,19 @@ package cloud.mockingbird.movietesting.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class MoviePoster implements Parcelable {
 
+  @SerializedName("title")
   private String movieTitle;
+  @SerializedName("release_date")
   private String movieReleaseDate;
+  @SerializedName("vote_average")
   private String movieRating;
+  @SerializedName("overview")
   private String movieDescription;
+  @SerializedName("poster_path")
   private String movieImagePath;
 
   public MoviePoster(String title, String releaseDate, String rating, String description, String imagePath){
