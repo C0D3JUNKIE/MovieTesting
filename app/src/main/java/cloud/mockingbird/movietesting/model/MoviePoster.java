@@ -3,22 +3,39 @@ package cloud.mockingbird.movietesting.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class MoviePoster implements Parcelable {
 
+  @SerializedName("id")
+  @Expose
+  private String movieId;
+
   @SerializedName("title")
+  @Expose
   private String movieTitle;
+
   @SerializedName("release_date")
+  @Expose
   private String movieReleaseDate;
+
   @SerializedName("vote_average")
   private String movieRating;
   @SerializedName("overview")
+  @Expose
   private String movieDescription;
+
   @SerializedName("poster_path")
+  @Expose
   private String movieImagePath;
 
-  public MoviePoster(String title, String releaseDate, String rating, String description, String imagePath){
+  //No Arg Constructor
+  public MoviePoster(){}
+
+  //Constructor
+  public MoviePoster(String id, String title, String releaseDate, String rating, String description, String imagePath){
+    movieId = id;
     movieTitle = title;
     movieReleaseDate = releaseDate;
     movieRating = rating;
@@ -26,8 +43,10 @@ public class MoviePoster implements Parcelable {
     movieImagePath = imagePath;
   }
 
+  //Parcel Constructor
   private MoviePoster(Parcel source){
 
+    movieId = source.readString();
     movieTitle = source.readString();
     movieReleaseDate = source.readString();
     movieRating = source.readString();
@@ -36,6 +55,15 @@ public class MoviePoster implements Parcelable {
 
   }
 
+
+  //Getters and Setters for POJO
+  public String getMovieId() {
+    return movieId;
+  }
+
+  public void setMovieId(String movieId) {
+    this.movieId = movieId;
+  }
 
   public String getMovieTitle() {
     return movieTitle;
@@ -80,6 +108,7 @@ public class MoviePoster implements Parcelable {
 
   public static final Parcelable.Creator<MoviePoster> CREATOR = new Parcelable.Creator<MoviePoster>() {
 
+    @SuppressWarnings({"unchecked"})
     @Override
     public MoviePoster createFromParcel(Parcel parcel) {
       return new MoviePoster(parcel);
