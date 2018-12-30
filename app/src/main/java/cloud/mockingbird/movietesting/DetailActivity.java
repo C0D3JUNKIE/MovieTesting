@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.facebook.stetho.Stetho;
 import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
@@ -33,6 +35,7 @@ public class DetailActivity extends AppCompatActivity {
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Stetho.initializeWithDefaults(this);
     setContentView(R.layout.activity_detail);
 
     movieImage = (ImageView) findViewById(R.id.iv_movie_poster_image);

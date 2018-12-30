@@ -14,12 +14,15 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.facebook.stetho.Stetho;
+
+import cloud.mockingbird.movietesting.adapters.MoviePosterAdapter;
 import cloud.mockingbird.movietesting.data.MoviePreferences;
 import cloud.mockingbird.movietesting.utilities.JsonUtility;
 import cloud.mockingbird.movietesting.utilities.NetworkUtility;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity implements MoviePosterAdapterOnClickHandler{
+public class MainActivity extends AppCompatActivity implements MoviePosterAdapter.MoviePosterAdapterOnClickHandler {
 
   private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Stetho.initializeWithDefaults(this);
     setContentView(R.layout.activity_main);
 
     //Tie recyclerView, errorText, and progressBar to the xml entity.
