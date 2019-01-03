@@ -10,3 +10,6 @@ Working on Grow with Google Scholarship for NanoDegree testing various project s
 #### OKHTTP - http://square.github.io/okhttp/
 
 #### Stetho - https://facebook.github.io/stetho/
+
+
+Please note that most conversion work is happening in the convert-to-retrofit branch. Will merge when all superfluous files are removed and functionality is tested. :-) 
