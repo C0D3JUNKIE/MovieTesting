@@ -27,12 +27,11 @@ public class NetworkUtility {
   private static final String PAGE_PARAM = "1";
   private static final String APIKEY = BuildConfig.API_KEY;
   private static final String IMAGE_PATH = "http://image.tmdb.org/t/p/";
-  private static final String POPULAR_MOVIE_PATH = DEFAULT_URL + "popular" + KEY_PARAM + APIKEY;
-  private static final String TOPRATED_MOVIE_PATH = DEFAULT_URL + "top_rated" + KEY_PARAM + APIKEY;
   private static final String TRAILER_PATH = "/videos";
   private static final String REVIEW_PATH = "/reviews";
 
-
+  public static final String POPULAR_MOVIE_PATH = DEFAULT_URL + "popular" + KEY_PARAM + APIKEY;
+  public static final String TOPRATED_MOVIE_PATH = DEFAULT_URL + "top_rated" + KEY_PARAM + APIKEY;
 
   public static APIService getAPIService(){
     Log.d(LOG_TAG, "****    getAPIService: Retrofit call to Base Url    *****");
