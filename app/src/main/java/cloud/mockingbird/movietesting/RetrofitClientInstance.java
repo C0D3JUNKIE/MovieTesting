@@ -13,7 +13,7 @@ public class RetrofitClientInstance {
     private RetrofitClientInstance(){ }
 
     //Retrofit get method
-    public static Retrofit getRetrofitInstance(){
+    public static Retrofit getRetrofitInstance(String baseUrl){
 
         if(retrofit == null){
             retrofit = new Retrofit.Builder()
