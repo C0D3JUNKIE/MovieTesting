@@ -3,6 +3,7 @@ package cloud.mockingbird.movietesting;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,12 +16,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.stetho.Stetho;
+import com.facebook.stetho.inspector.protocol.module.Network;
 
 import cloud.mockingbird.movietesting.adapters.MoviePosterAdapter;
 import cloud.mockingbird.movietesting.data.MoviePreferences;
+import cloud.mockingbird.movietesting.interfaces.APIService;
+import cloud.mockingbird.movietesting.model.MoviePoster;
+import cloud.mockingbird.movietesting.model.MoviePosterResults;
 import cloud.mockingbird.movietesting.utilities.JsonUtility;
 import cloud.mockingbird.movietesting.utilities.NetworkUtility;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import java.net.URL;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MoviePosterAdapter.MoviePosterAdapterOnClickHandler {
 
@@ -29,16 +39,22 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
   public static final int TEXT_INDEX_ID = 1;
   public static final int IMAGE_INDEX_ID = 5;
 
+  private List<MoviePoster> movies;
   private MoviePosterAdapter moviePosterAdapter;
   private RecyclerView recyclerView;
   private TextView errorMessageDisplay;
   private ProgressBar loadingIndicator;
+  private APIService apiService;
+  private Parcelable position;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Stetho.initializeWithDefaults(this);
     setContentView(R.layout.activity_main);
+
+    //Declaration and initialization of API Service
+    apiService = NetworkUtility.getAPIService();
 
     //Tie recyclerView, errorText, and progressBar to the xml entity.
     recyclerView = (RecyclerView) findViewById(R.id.rv_movie_posters);
@@ -100,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
   protected void loadMovies(){
     showMovies();
     String selectedSort = MoviePreferences.getSortPreferred();
-    new FetchMovies().execute(selectedSort);
+//    new FetchMovies().execute(selectedSort);
   }
 
   protected void showErrorMessage(){
@@ -108,42 +124,55 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
     errorMessageDisplay.setVisibility(View.VISIBLE);
   }
 
-  public class FetchMovies extends AsyncTask<String, Void, String[][]>{
+  private void fetchMovies(Call<MoviePosterResults> call, Response<MoviePosterResults> response) {
+    apiService.getPopularMoviePosters().enqueue(new Callback<MoviePosterResults>() {
+      @Override
+      public void onResponse(Call<MoviePosterResults> call, Response<MoviePosterResults> response) {
 
-    @Override
-    protected void onPreExecute() {
-      super.onPreExecute();
-      loadingIndicator.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    protected void onPostExecute(String[][] strings) {
-      loadingIndicator.setVisibility(View.INVISIBLE);
-      if(strings != null){
-        showMovies();
-        moviePosterAdapter.setMoviePosterData(strings);
-      }else{
-        showErrorMessage();
       }
 
-    }
+      @Override
+      public void onFailure(Call<MoviePosterResults> call, Throwable t) {
 
-    @Override
-    protected String[][] doInBackground(String... strings) {
-      if (strings.length == 0) {
-        return null;
       }
-      String params = strings[0];
-      URL movieURL = NetworkUtility.buildUrl(MainActivity.this, params);
-      try{
-        String jsonResponse = NetworkUtility.getResponseFromHttpURL(movieURL);
-        String[][] jsonMovieData = JsonUtility.getMoviePosterValuesFromJson(jsonResponse);
-        return jsonMovieData;
-      }catch(Exception e){
-        e.printStackTrace();
-        return null;
-      }
-    }
+    });
+  }
+//  public class FetchMovies extends AsyncTask<String, Void, String[][]>{
+//
+//    @Override
+//    protected void onPreExecute() {
+//      super.onPreExecute();
+//      loadingIndicator.setVisibility(View.VISIBLE);
+//    }
+//
+//    @Override
+//    protected void onPostExecute(String[][] strings) {
+//      loadingIndicator.setVisibility(View.INVISIBLE);
+//      if(strings != null){
+//        showMovies();
+//        moviePosterAdapter.setMoviePosterData(strings);
+//      }else{
+//        showErrorMessage();
+//      }
+//
+//    }
+//
+//    @Override
+//    protected String[][] doInBackground(String... strings) {
+//      if (strings.length == 0) {
+//        return null;
+//      }
+//      String params = strings[0];
+//      URL movieURL = NetworkUtility.buildUrl(MainActivity.this, params);
+//      try{
+//        String jsonResponse = NetworkUtility.getResponseFromHttpURL(movieURL);
+//        String[][] jsonMovieData = JsonUtility.getMoviePosterValuesFromJson(jsonResponse);
+//        return jsonMovieData;
+//      }catch(Exception e){
+//        e.printStackTrace();
+//        return null;
+//      }
+//    }
 
   }
 
