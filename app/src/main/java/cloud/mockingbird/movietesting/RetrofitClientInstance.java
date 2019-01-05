@@ -7,7 +7,7 @@ public class RetrofitClientInstance {
 
     //Private class variables
     private static Retrofit retrofit = null;
-    private static final String BASE_URL = "https://api.themoviedb.org/3/movie";
+    private static final String BASE_URL = "https://api.themoviedb.org/3/movie/";
 
     //Private Constructor? is this even needed?
     private RetrofitClientInstance(){ }

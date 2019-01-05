@@ -1,6 +1,7 @@
 package cloud.mockingbird.movietesting.adapters;
 
 import android.content.Context;
+import android.graphics.Movie;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,8 +12,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import cloud.mockingbird.movietesting.MainActivity;
 import cloud.mockingbird.movietesting.R;
+import cloud.mockingbird.movietesting.model.MoviePoster;
 
 public class MoviePosterAdapter extends RecyclerView.Adapter<MoviePosterAdapter.MoviePosterAdapterViewHolder> {
 
@@ -20,16 +24,22 @@ public class MoviePosterAdapter extends RecyclerView.Adapter<MoviePosterAdapter.
     private static final String MOVIEDB_IMAGE_URL = "https://image.tmdb.org/t/p/w780";
 
     //Local variables
-    private String[][] moviePosterData;
+    private List<MoviePoster> moviePosterData;
     final private MoviePosterAdapterOnClickHandler clickHandler;
 
     //Nested interface for onClick implementation
-    public interface MoviePosterAdapterOnClickHandler { void onClick(String[] moviePosterSelected);}
+    public interface MoviePosterAdapterOnClickHandler { void onClick(int moviePosterSelected);}
 
     //Adapter constructor
-    public MoviePosterAdapter(MoviePosterAdapterOnClickHandler handler) {
-        clickHandler = handler;
+
+    public MoviePosterAdapter(List<MoviePoster> moviePosterData, MoviePosterAdapterOnClickHandler clickHandler) {
+        this.moviePosterData = moviePosterData;
+        this.clickHandler = clickHandler;
     }
+    //Old Constructor
+//    public MoviePosterAdapter(MoviePosterAdapterOnClickHandler handler) {
+//        clickHandler = handler;
+//    }
 
     /**
      * AdapterViewHolder Inner Class with super class RecyclerView.ViewHolder with onClickListener interface.
@@ -53,7 +63,7 @@ public class MoviePosterAdapter extends RecyclerView.Adapter<MoviePosterAdapter.
         @Override
         public void onClick(View view) {
             int adapterPosition = getAdapterPosition();
-            clickHandler.onClick(moviePosterData[adapterPosition]);
+            clickHandler.onClick(adapterPosition);
         }
 
     }
@@ -74,10 +84,15 @@ public class MoviePosterAdapter extends RecyclerView.Adapter<MoviePosterAdapter.
     //Implementing onBindViewHolder from RecyclerView.Adapter utilizing Picasso to display MoviePoster images.
     @Override
     public void onBindViewHolder(@NonNull MoviePosterAdapterViewHolder holder, int position) {
-        String listedMovies[] = moviePosterData[position];
-        holder.movieText.setText(listedMovies[MainActivity.TEXT_INDEX_ID]);
+//        String listedMovies[] = moviePosterData[position];
+//        holder.movieText.setText(listedMovies[MainActivity.TEXT_INDEX_ID]);
+
+        MoviePoster individualMovie = moviePosterData.get(position);
+        String title = individualMovie.getMovieTitle();
+        String image = individualMovie.getMovieImagePath();
+        String imageUrl = MOVIEDB_IMAGE_URL + image;
         Picasso.get()
-                .load(MOVIEDB_IMAGE_URL + listedMovies[5])
+                .load(imageUrl)
                 .into(holder.movieImage);
     }
 
@@ -87,13 +102,13 @@ public class MoviePosterAdapter extends RecyclerView.Adapter<MoviePosterAdapter.
         if (null == moviePosterData) {
             return 0;
         }
-        return moviePosterData.length;
+        return moviePosterData.size();
     }
 
     /**
      * Setting movieData to class variable moviePosterData.
      */
-    public void setMoviePosterData(String[][] movieData) {
+    public void setMoviePosterData(List<MoviePoster> movieData) {
         moviePosterData = movieData;
         notifyDataSetChanged();
     }

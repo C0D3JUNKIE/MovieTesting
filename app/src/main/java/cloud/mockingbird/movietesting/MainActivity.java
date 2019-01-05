@@ -2,6 +2,8 @@ package cloud.mockingbird.movietesting;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +33,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MoviePosterAdapter.MoviePosterAdapterOnClickHandler {
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
     recyclerView.setHasFixedSize(true);
 
     //Tie the adapter to the views
-    moviePosterAdapter = new MoviePosterAdapter(this);
+    moviePosterAdapter = new MoviePosterAdapter(new ArrayList<MoviePoster>(0), this);
     recyclerView.setAdapter(moviePosterAdapter);
 
     loadingIndicator = findViewById(R.id.pb_loading_indicator);
@@ -110,14 +113,22 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
   }
 
   //onClick implementation for AdapterOnClickHandler
+
   @Override
-  public void onClick(String[] moviePosterSelected) {
-    Context context = this;
-    Class destinationClass = DetailActivity.class;
-    Intent intentToStartDetailActivity = new Intent(context, destinationClass);
-    intentToStartDetailActivity.putExtra(Intent.EXTRA_TEXT, moviePosterSelected);
-    startActivity(intentToStartDetailActivity);
+  public void onClick(int moviePosterSelected) {
+    Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+    intent.putExtra("moviePoster", movies.get(moviePosterSelected));
+    startActivity(intent);
   }
+
+//  @Override
+//  public void onClick(String[] moviePosterSelected) {
+//    Context context = this;
+//    Class destinationClass = DetailActivity.class;
+//    Intent intentToStartDetailActivity = new Intent(context, destinationClass);
+//    intentToStartDetailActivity.putExtra(Intent.EXTRA_TEXT, moviePosterSelected);
+//    startActivity(intentToStartDetailActivity);
+//  }
 
   /**
    * Displays movie data in recycler view
@@ -134,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
     showMovies();
     String selectedSort = MoviePreferences.getSortPreferred();
 //    new FetchMovies().execute(selectedSort);
+    fetchMovies();
   }
 
   /**
@@ -147,16 +159,17 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
   /**
    *
    *
-   * @param call
-   * @param response
    */
-  private void fetchMovies(Call<MoviePosterResults> call, Response<MoviePosterResults> response) {
+  private void fetchMovies() {
     apiService.getPopularMoviePosters().enqueue(new Callback<MoviePosterResults>() {
       @Override
       public void onResponse(Call<MoviePosterResults> call, Response<MoviePosterResults> response) {
         if(response.isSuccessful()) {
           Log.d(TAG, "onResponse: Call from API had a successful response.");
           movies = response.body().getResults();
+          moviePosterAdapter.setMoviePosterData(movies);
+          recyclerView.setAdapter(moviePosterAdapter);
+          Log.d(TAG, "onResponse: RecyclerView set");
         }else{
           Log.d(TAG, "onResponse: ERROR from API Call response.");
         }  
@@ -168,6 +181,28 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
       }
     });
   }
+
+  private void fetchMoviesByRating() {
+    apiService.getTopRatedMoviePosters().enqueue(new Callback<MoviePosterResults>() {
+      @Override
+      public void onResponse(Call<MoviePosterResults> call, Response<MoviePosterResults> response) {
+        if(response.isSuccessful()) {
+          Log.d(TAG, "onResponse: Call from API had a successful response.");
+          movies = response.body().getResults();
+          moviePosterAdapter.setMoviePosterData(movies);
+          recyclerView.setAdapter(moviePosterAdapter);
+        }else{
+          Log.d(TAG, "onResponse: ERROR from API Call response.");
+        }
+      }
+
+      @Override
+      public void onFailure(Call<MoviePosterResults> call, Throwable t) {
+
+      }
+    });
+  }
+
 //  public class FetchMovies extends AsyncTask<String, Void, String[][]>{
 //
 //    @Override
@@ -204,7 +239,13 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
 //        return null;
 //      }
 //    }
+//
+//  }
 
+  private boolean networkConnection(){
+    ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+    return networkInfo != null && networkInfo.isConnected();
   }
 
   @Override
@@ -219,10 +260,12 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()){
       case R.id.action_by_rating:
-        new FetchMovies().execute(MoviePreferences.PREF_SORT_RATING);
+        fetchMoviesByRating();
+//        new FetchMovies().execute(MoviePreferences.PREF_SORT_RATING);
         return true;
       case R.id.action_by_popularity:
-        new FetchMovies().execute(MoviePreferences.PREF_SORT_POPULARITY);
+//        new FetchMovies().execute(MoviePreferences.PREF_SORT_POPULARITY);
+        fetchMovies();
         return true;
       case R.id.action_refresh:
         moviePosterAdapter.setMoviePosterData(null);

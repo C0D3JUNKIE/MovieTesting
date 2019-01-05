@@ -34,7 +34,7 @@ public class NetworkUtility {
   public static final String TOPRATED_MOVIE_PATH = DEFAULT_URL + "top_rated" + KEY_PARAM + APIKEY;
 
   public static APIService getAPIService(){
-    Log.d(LOG_TAG, "****    getAPIService: Retrofit call to Base Url    *****");
+    Log.d(LOG_TAG, "****    getAPIService: Retrofit call to client instance and api service    *****");
     return RetrofitClientInstance.getRetrofitInstance(DEFAULT_URL).create(APIService.class);
   }
 
