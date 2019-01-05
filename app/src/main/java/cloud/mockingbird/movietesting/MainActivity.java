@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,16 +37,19 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
 
   private static final String TAG = MainActivity.class.getSimpleName();
 
+  //Class variables
   public static final int TEXT_INDEX_ID = 1;
   public static final int IMAGE_INDEX_ID = 5;
 
+  //Local variables
   private List<MoviePoster> movies;
   private MoviePosterAdapter moviePosterAdapter;
   private RecyclerView recyclerView;
   private TextView errorMessageDisplay;
   private ProgressBar loadingIndicator;
   private APIService apiService;
-  private Parcelable position;
+  private GridLayoutManager layoutManager;
+  private Parcelable moviePosterState;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -79,26 +83,33 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
     loadMovies();
   }
 
+  //Lifecycle support methods
   @Override
   protected void onStart() {
     super.onStart();
   }
 
+  //Lifecycle support methods
   @Override
   protected void onDestroy() {
     super.onDestroy();
   }
 
+  //Lifecycle support methods
   @Override
   public void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
+    outState.putParcelable("movieList", layoutManager.onSaveInstanceState());
   }
 
+  //Lifecycle support methods
   @Override
   public void onRestoreInstanceState(Bundle savedInstanceState) {
     super.onRestoreInstanceState(savedInstanceState);
+    moviePosterState = savedInstanceState.getParcelable("movieList");
   }
 
+  //onClick implementation for AdapterOnClickHandler
   @Override
   public void onClick(String[] moviePosterSelected) {
     Context context = this;
@@ -108,27 +119,47 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
     startActivity(intentToStartDetailActivity);
   }
 
+  /**
+   * Displays movie data in recycler view
+   */
   protected void showMovies(){
     errorMessageDisplay.setVisibility(View.INVISIBLE);
     recyclerView.setVisibility(View.VISIBLE);
   }
 
+  /**
+   * Calls showMovies method and gets specified sort and creates nested class object.
+   */
   protected void loadMovies(){
     showMovies();
     String selectedSort = MoviePreferences.getSortPreferred();
 //    new FetchMovies().execute(selectedSort);
   }
 
+  /**
+   * Displays error message
+   */
   protected void showErrorMessage(){
     recyclerView.setVisibility(View.INVISIBLE);
     errorMessageDisplay.setVisibility(View.VISIBLE);
   }
 
+  /**
+   *
+   *
+   * @param call
+   * @param response
+   */
   private void fetchMovies(Call<MoviePosterResults> call, Response<MoviePosterResults> response) {
     apiService.getPopularMoviePosters().enqueue(new Callback<MoviePosterResults>() {
       @Override
       public void onResponse(Call<MoviePosterResults> call, Response<MoviePosterResults> response) {
-
+        if(response.isSuccessful()) {
+          Log.d(TAG, "onResponse: Call from API had a successful response.");
+          movies = response.body().getResults();
+        }else{
+          Log.d(TAG, "onResponse: ERROR from API Call response.");
+        }  
       }
 
       @Override
@@ -178,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
+    super.onCreateOptionsMenu(menu);
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.menu, menu);
     return true;
