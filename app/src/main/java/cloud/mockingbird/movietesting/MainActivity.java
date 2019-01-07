@@ -83,7 +83,15 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
     recyclerView.setAdapter(moviePosterAdapter);
 
     loadingIndicator = findViewById(R.id.pb_loading_indicator);
-    loadMovies();
+    if(savedInstanceState != null){
+        movies = savedInstanceState.getParcelableArrayList("movieList");
+    }
+    if(movies != null){
+        moviePosterAdapter.setMoviePosterData(movies);
+    }else{
+        loadMovies();
+    }
+
   }
 
   //Lifecycle support methods
@@ -102,7 +110,8 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
   @Override
   public void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    outState.putParcelable("movieList", layoutManager.onSaveInstanceState());
+//    outState.putParcelable("movieList", layoutManager.onSaveInstanceState());
+      outState.putParcelableArrayList("movieList", (ArrayList<? extends Parcelable>) movies);
   }
 
   //Lifecycle support methods
