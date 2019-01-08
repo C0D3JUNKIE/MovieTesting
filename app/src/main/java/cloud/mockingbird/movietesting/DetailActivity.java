@@ -2,10 +2,12 @@ package cloud.mockingbird.movietesting;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -14,19 +16,19 @@ import android.widget.TextView;
 import com.facebook.stetho.Stetho;
 import com.squareup.picasso.Picasso;
 
+import cloud.mockingbird.movietesting.model.MoviePoster;
+
 public class DetailActivity extends AppCompatActivity {
 
   private static final String imageURL = "https://image.tmdb.org/t/p/w185";
 
-  private String[] movie;
-
   private ImageView movieImage;
-
 
   private TextView movieTitle;
   private TextView movieReleaseDate;
   private TextView movieRating;
   private TextView movieDescription;
+  private MoviePoster moviePoster;
 
   /**
    *
@@ -35,29 +37,28 @@ public class DetailActivity extends AppCompatActivity {
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Stetho.initializeWithDefaults(this);
+//    Stetho.initializeWithDefaults(this);
     setContentView(R.layout.activity_detail);
 
     movieImage = (ImageView) findViewById(R.id.iv_movie_poster_image);
-
     movieTitle = (TextView) findViewById(R.id.tv_movie_title);
     movieReleaseDate = (TextView) findViewById(R.id.tv_movie_release_date);
     movieRating = (TextView) findViewById(R.id.tv_movie_vote_average);
     movieDescription = (TextView) findViewById(R.id.tv_movie_plot);
 
-    //id[0], title[1], plot[2], language[3], date[4], image[5], vote[6], rating[7]
     Intent intent = getIntent();
-    if(intent != null){
-      if(intent.hasExtra(Intent.EXTRA_TEXT)){
-        movie = intent.getStringArrayExtra(Intent.EXTRA_TEXT);
-        movieTitle.setText(movie[1]);
-//        movieImage.setImageResource(Integer.parseInt(movie[5]));
-        movieReleaseDate.setText(movie[4]);
-        movieRating.setText(movie[6]);
-        movieDescription.setText(movie[2]);
-        Picasso.get().load(imageURL + movie[5]).into(movieImage);
-      }
-    }
+    MoviePoster poster = intent.getParcelableExtra("moviePoster");
+    moviePoster = poster;
+
+    movieTitle.setText(moviePoster.getMovieTitle());
+    movieReleaseDate.setText(moviePoster.getMovieReleaseDate());
+    movieRating.setText(moviePoster.getMovieRating());
+    movieDescription.setText(moviePoster.getMovieDescription());
+
+    Uri uri = Uri.parse(imageURL + moviePoster.getMovieImagePath());
+    Picasso.get()
+            .load(uri)
+            .into(movieImage);
 
   }
 

@@ -2,10 +2,12 @@ package cloud.mockingbird.movietesting;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Parcelable;
+import android.support.v4.app.LoaderManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -78,8 +80,13 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.setHasFixedSize(true);
 
+//    LoaderManager.LoaderCallbacks<Cursor> callback = MainActivity.this;
+
     //Tie the adapter to the views
+//    movies = new ArrayList<>();
+//    moviePosterAdapter = new MoviePosterAdapter(movies,this);
     moviePosterAdapter = new MoviePosterAdapter(new ArrayList<MoviePoster>(0), this);
+//    moviePosterAdapter.setMoviePosterData(movies);
     recyclerView.setAdapter(moviePosterAdapter);
 
     loadingIndicator = findViewById(R.id.pb_loading_indicator);

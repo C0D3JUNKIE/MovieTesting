@@ -1,5 +1,9 @@
 package cloud.mockingbird.movietesting;
 
+import android.util.Log;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -15,6 +19,11 @@ public class RetrofitClientInstance {
     //Retrofit get method
     public static Retrofit getRetrofitInstance(String baseUrl){
 
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        clientBuilder.addInterceptor(loggingInterceptor);
+
         if(retrofit == null){
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
@@ -23,4 +32,5 @@ public class RetrofitClientInstance {
         }
         return retrofit;
     }
+
 }

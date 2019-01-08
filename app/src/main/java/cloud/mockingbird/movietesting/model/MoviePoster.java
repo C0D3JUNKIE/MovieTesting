@@ -128,6 +128,7 @@ public class MoviePoster implements Parcelable {
 
   @Override
   public void writeToParcel(Parcel parcel, int i) {
+    parcel.writeString(movieId);
     parcel.writeString(movieTitle);
     parcel.writeString(movieReleaseDate);
     parcel.writeString(movieRating);

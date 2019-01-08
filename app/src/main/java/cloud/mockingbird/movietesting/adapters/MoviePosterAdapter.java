@@ -1,7 +1,9 @@
 package cloud.mockingbird.movietesting.adapters;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Movie;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,15 +27,15 @@ public class MoviePosterAdapter extends RecyclerView.Adapter<MoviePosterAdapter.
 
     //Local variables
     private List<MoviePoster> moviePosterData;
-    final private MoviePosterAdapterOnClickHandler clickHandler;
+    private final MoviePosterAdapterOnClickHandler clickHandler;
 
     //Nested interface for onClick implementation
     public interface MoviePosterAdapterOnClickHandler { void onClick(int moviePosterSelected);}
 
     //Adapter constructor
 
-    public MoviePosterAdapter(List<MoviePoster> moviePosterData, MoviePosterAdapterOnClickHandler clickHandler) {
-        this.moviePosterData = moviePosterData;
+    public MoviePosterAdapter(List<MoviePoster> movies, MoviePosterAdapterOnClickHandler clickHandler) {
+        this.moviePosterData = movies;
         this.clickHandler = clickHandler;
     }
     //Old Constructor
@@ -48,14 +50,14 @@ public class MoviePosterAdapter extends RecyclerView.Adapter<MoviePosterAdapter.
             View.OnClickListener {
 
         //Local variables
-        ImageView movieImage;
-        TextView movieText;
+        public final ImageView movieImage;
+//        public final TextView movieText;
 
         //AdapterViewHolder constructor
         public MoviePosterAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
             movieImage = itemView.findViewById(R.id.iv_movie_poster);
-            movieText = itemView.findViewById(R.id.tv_movie_text);
+//            movieText = itemView.findViewById(R.id.tv_movie_text);
             itemView.setOnClickListener(this);
         }
 
@@ -87,13 +89,9 @@ public class MoviePosterAdapter extends RecyclerView.Adapter<MoviePosterAdapter.
 //        String listedMovies[] = moviePosterData[position];
 //        holder.movieText.setText(listedMovies[MainActivity.TEXT_INDEX_ID]);
 
-        MoviePoster individualMovie = moviePosterData.get(position);
-        String title = individualMovie.getMovieTitle();
-        String image = individualMovie.getMovieImagePath();
-        String imageUrl = MOVIEDB_IMAGE_URL + image;
-        Picasso.get()
-                .load(imageUrl)
-                .into(holder.movieImage);
+        MoviePoster movie = moviePosterData.get(position);
+        Uri uri = Uri.parse(MOVIEDB_IMAGE_URL + movie.getMovieImagePath());
+        Picasso.get().load(uri).into(holder.movieImage);
     }
 
     //Implementing getItemCount from RecyclerView.Adapter.
