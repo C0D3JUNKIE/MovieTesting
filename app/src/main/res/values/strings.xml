@@ -28,4 +28,13 @@
 
     <!--<string name="movie_db_key">1234567890</string>-->
 
+    <string name="content_description_title">Movie Title</string>
+
+
+    <string name="trailer_header">Trailers</string>
+    <string name="no_trailers">This movie does not have any trailers.</string>
+
+    <string name="review_header">Reviews</string>
+    <string name="no_reviews">This movie does not have any reviews.</string>
+
 </resources>
