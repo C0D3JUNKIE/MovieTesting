@@ -20,7 +20,7 @@ import cloud.mockingbird.movietesting.model.MoviePoster;
 
 public class DetailActivity extends AppCompatActivity {
 
-  private static final String imageURL = "https://image.tmdb.org/t/p/w185";
+  private static final String imageURL = "https://image.tmdb.org/t/p/w500";
 
   private ImageView movieImage;
 
