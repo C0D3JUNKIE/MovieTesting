@@ -1,9 +1,11 @@
 package cloud.mockingbird.movietesting.interfaces;
 
-import static cloud.mockingbird.movietesting.utilities.NetworkUtility.POPULAR_MOVIE_PATH;
-import static cloud.mockingbird.movietesting.utilities.NetworkUtility.TOPRATED_MOVIE_PATH;
+import static cloud.mockingbird.movietesting.utilities.APIUtility.POPULAR_MOVIE_PATH;
+import static cloud.mockingbird.movietesting.utilities.APIUtility.TOPRATED_MOVIE_PATH;
 
 import cloud.mockingbird.movietesting.model.MoviePosterResults;
+import cloud.mockingbird.movietesting.model.MovieReviewResults;
+import cloud.mockingbird.movietesting.model.MovieTrailerResults;
 import retrofit2.http.GET;
 import retrofit2.Call;
 import retrofit2.http.Url;
@@ -19,12 +21,12 @@ public interface APIService {
     @GET(TOPRATED_MOVIE_PATH)
     Call<MoviePosterResults> getTopRatedMoviePosters();
 
-    //Get Trailers for Details
+    //Get Trailer Details
     @GET
-    Call<MoviePosterResults> getMoviePosterTrailers(@Url String trailerUrl);
+    Call<MovieTrailerResults> getMoviePosterTrailers(@Url String trailerUrl);
 
-    //Get
+    //Get Review Details
     @GET
-    Call<MoviePosterResults> getMoviePosterReviews(@Url String reviewUrl);
+    Call<MovieReviewResults> getMoviePosterReviews(@Url String reviewUrl);
 
 }

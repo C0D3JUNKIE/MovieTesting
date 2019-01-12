@@ -2,12 +2,9 @@ package cloud.mockingbird.movietesting;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Parcelable;
-import android.support.v4.app.LoaderManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,20 +18,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.stetho.Stetho;
-import com.facebook.stetho.inspector.protocol.module.Network;
 
 import cloud.mockingbird.movietesting.adapters.MoviePosterAdapter;
 import cloud.mockingbird.movietesting.data.MoviePreferences;
 import cloud.mockingbird.movietesting.interfaces.APIService;
 import cloud.mockingbird.movietesting.model.MoviePoster;
 import cloud.mockingbird.movietesting.model.MoviePosterResults;
-import cloud.mockingbird.movietesting.utilities.JsonUtility;
-import cloud.mockingbird.movietesting.utilities.NetworkUtility;
+import cloud.mockingbird.movietesting.utilities.APIUtility;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
     setContentView(R.layout.activity_main);
 
     //Declaration and initialization of API Service
-    apiService = NetworkUtility.getAPIService();
+    apiService = APIUtility.getAPIService();
 
     //Tie recyclerView, errorText, and progressBar to the xml entity.
     recyclerView = (RecyclerView) findViewById(R.id.rv_movie_posters);
@@ -245,9 +239,9 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
 //        return null;
 //      }
 //      String params = strings[0];
-//      URL movieURL = NetworkUtility.buildUrl(MainActivity.this, params);
+//      URL movieURL = APIUtility.buildUrl(MainActivity.this, params);
 //      try{
-//        String jsonResponse = NetworkUtility.getResponseFromHttpURL(movieURL);
+//        String jsonResponse = APIUtility.getResponseFromHttpURL(movieURL);
 //        String[][] jsonMovieData = JsonUtility.getMoviePosterValuesFromJson(jsonResponse);
 //        return jsonMovieData;
 //      }catch(Exception e){

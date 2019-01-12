@@ -15,14 +15,14 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import cloud.mockingbird.movietesting.model.MovieTrailer;
-import cloud.mockingbird.movietesting.utilities.NetworkUtility;
+import cloud.mockingbird.movietesting.utilities.APIUtility;
 import cloud.mockingbird.movietesting.R;
 
 public class MovieTrailerAdapter extends RecyclerView.Adapter<MovieTrailerAdapter.MovieTrailerAdapterViewHolder> {
 
     private static final String TAG = MovieTrailerAdapter.class.getSimpleName();
 
-
+    private Context context;
     private List<MovieTrailer> movieTrailerData;
     private final MoviePosterAdapter.MoviePosterAdapterOnClickHandler clickHandler;
 
@@ -30,9 +30,15 @@ public class MovieTrailerAdapter extends RecyclerView.Adapter<MovieTrailerAdapte
        void onClick(int movieTrailerSelected);
    }
 
-    public MovieTrailerAdapter(List<MovieTrailer> movieTrailerData, MoviePosterAdapter.MoviePosterAdapterOnClickHandler clickHandler) {
-        this.movieTrailerData = movieTrailerData;
-        this.clickHandler = clickHandler;
+//    public MovieTrailerAdapter(List<MovieTrailer> movieTrailerData, MoviePosterAdapter.MoviePosterAdapterOnClickHandler clickHandler) {
+//        this.movieTrailerData = movieTrailerData;
+//        this.clickHandler = clickHandler;
+//    }
+
+    public MovieTrailerAdapter(Context context, List<MovieTrailer> movies, MoviePosterAdapter.MoviePosterAdapterOnClickHandler clickHandler){
+       this.context = context;
+       this.movieTrailerData = movies;
+       this.clickHandler = clickHandler;
     }
 
     public class MovieTrailerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -72,7 +78,7 @@ public class MovieTrailerAdapter extends RecyclerView.Adapter<MovieTrailerAdapte
         MovieTrailer trailer = movieTrailerData.get(i);
         String trailerTitle = trailer.getName();
         String trailerId = trailer.getKey();
-        Uri uri = Uri.parse(NetworkUtility.DEFAULT_URL + trailerId + NetworkUtility.TRAILER_PATH + NetworkUtility.KEY_PARAM + NetworkUtility.APIKEY);
+        Uri uri = Uri.parse(APIUtility.DEFAULT_URL + trailerId + APIUtility.TRAILER_PATH + APIUtility.KEY_PARAM + APIUtility.APIKEY);
         movieTrailerAdapterViewHolder.movieTrailerTitle.setText(trailerTitle);
         Picasso.get()
                 .load(uri)

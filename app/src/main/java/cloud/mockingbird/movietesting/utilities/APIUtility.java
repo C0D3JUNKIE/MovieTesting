@@ -1,25 +1,14 @@
 package cloud.mockingbird.movietesting.utilities;
 
-import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 
 import cloud.mockingbird.movietesting.BuildConfig;
-import cloud.mockingbird.movietesting.R;
 import cloud.mockingbird.movietesting.RetrofitClientInstance;
 import cloud.mockingbird.movietesting.interfaces.APIService;
-import retrofit2.Retrofit;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Scanner;
+public class APIUtility {
 
-public class NetworkUtility {
-
-  private static final String LOG_TAG = NetworkUtility.class.getSimpleName();
+  private static final String LOG_TAG = APIUtility.class.getSimpleName();
   public static final String BASE_URL = "https://api.themoviedb.org/3/movie/";
   public static final String DEFAULT_URL = BASE_URL;
   public static final String KEY_PARAM = "?api_key=";
@@ -32,6 +21,14 @@ public class NetworkUtility {
 
   public static final String POPULAR_MOVIE_PATH = DEFAULT_URL + "popular" + KEY_PARAM + APIKEY;
   public static final String TOPRATED_MOVIE_PATH = DEFAULT_URL + "top_rated" + KEY_PARAM + APIKEY;
+
+  public static final String YOUTUBE_APP = "vnd.youtube:";
+  public static final String TRAILER_YOUTUBE_PATH = "https://www.youtube.com/watch?v=";
+  public static final String TRAILER_IMAGE_PATH = "https://img.youtube.com/vi/";
+  public static final String TRAILER_IMAGE_PARAM = "/1.jpg";
+
+
+
 
   public static APIService getAPIService(){
     Log.d(LOG_TAG, "****    getAPIService: Retrofit call to client instance and api service    *****");

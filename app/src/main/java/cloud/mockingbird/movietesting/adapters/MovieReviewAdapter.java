@@ -18,20 +18,20 @@ public class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.
 
     private static final String TAG = MovieReviewAdapter.class.getSimpleName();
 
+    private Context context;
     private List<MovieReview> movieReviewData;
-    private final MovieReviewAdapterOnClickHandler clickHandler;
 
+//    public interface MovieReviewAdapterOnClickHandler{
+//        void onClick(int movieReviewSelected);
+//    }
 
-    public interface MovieReviewAdapterOnClickHandler{
-        void onClick(int movieReviewSelected);
-    }
-
-    public MovieReviewAdapter(List<MovieReview> movies, MovieReviewAdapterOnClickHandler clickHandler){
+    public MovieReviewAdapter(Context context, List<MovieReview> movies){
+        this.context = context;
         this.movieReviewData = movies;
-        this.clickHandler = clickHandler;
     }
 
-    public class MovieReviewAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+//    public class MovieReviewAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MovieReviewAdapterViewHolder extends RecyclerView.ViewHolder{
 
         public final TextView reviewAuthor;
         public final TextView reviewText;
@@ -40,14 +40,14 @@ public class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.
             super(itemView);
             this.reviewAuthor = itemView.findViewById(R.id.tv_review_author);
             this.reviewText = itemView.findViewById(R.id.tv_review_content);
-            itemView.setOnClickListener(this);
+//            itemView.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-            int adapterPosition = getAdapterPosition();
-            clickHandler.onClick(adapterPosition);
-        }
+//        @Override
+//        public void onClick(View v) {
+//            int adapterPosition = getAdapterPosition();
+//            clickHandler.onClick(adapterPosition);
+//        }
 
     }
 
