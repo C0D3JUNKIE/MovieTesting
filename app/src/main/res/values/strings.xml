@@ -37,5 +37,7 @@
 
     <string name="review_header">Reviews</string>
     <string name="no_reviews">This movie does not have any reviews.</string>
+    <string name="review_author">Example Author</string>
+    <string name="review_content">Example of the review content.</string>
 
 </resources>

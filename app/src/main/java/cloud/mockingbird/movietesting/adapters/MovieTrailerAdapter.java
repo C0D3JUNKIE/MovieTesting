@@ -78,7 +78,7 @@ public class MovieTrailerAdapter extends RecyclerView.Adapter<MovieTrailerAdapte
         MovieTrailer trailer = movieTrailerData.get(i);
         String trailerTitle = trailer.getName();
         String trailerId = trailer.getKey();
-        Uri uri = Uri.parse(APIUtility.DEFAULT_URL + trailerId + APIUtility.TRAILER_PATH + APIUtility.KEY_PARAM + APIUtility.APIKEY);
+        Uri uri = Uri.parse(APIUtility.TRAILER_IMAGE_PATH + trailerId + APIUtility.TRAILER_IMAGE_PARAM);
         movieTrailerAdapterViewHolder.movieTrailerTitle.setText(trailerTitle);
         Picasso.get()
                 .load(uri)

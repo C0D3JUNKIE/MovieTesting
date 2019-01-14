@@ -39,6 +39,7 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
   private static final String TAG = DetailActivity.class.getSimpleName();
 
   private ImageView movieImage;
+  private ImageView movieTrailerImage;
 
   private String movieId;
 
@@ -46,7 +47,13 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
   private TextView movieReleaseDate;
   private TextView movieRating;
   private TextView movieDescription;
+  private TextView movieTrailerText;
+  private TextView reviewAuthor;
+  private TextView reviewContents;
+
   private MoviePoster moviePoster;
+  private MovieTrailer movieTrailer;
+  private MovieReview movieReview;
 
   private  FloatingActionButton fabButton;
 
@@ -73,10 +80,15 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
     setContentView(R.layout.activity_detail);
 
     movieImage = (ImageView) findViewById(R.id.iv_movie_poster_image);
+    movieTrailerImage = (ImageView) findViewById(R.id.iv_movie_trailer_image);
+
     movieTitle = (TextView) findViewById(R.id.tv_movie_title);
     movieReleaseDate = (TextView) findViewById(R.id.tv_movie_release_date);
     movieRating = (TextView) findViewById(R.id.tv_movie_vote_average);
     movieDescription = (TextView) findViewById(R.id.tv_movie_plot);
+    reviewAuthor = (TextView) findViewById(R.id.tv_review_author);
+    reviewContents = (TextView) findViewById(R.id.tv_review_content);
+
     trailerRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_reviews);
     reviewRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_trailers);
 
@@ -90,9 +102,9 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
     movieDescription.setText(moviePoster.getMovieDescription());
 
     Uri uri = Uri.parse(imageURL + moviePoster.getMovieImagePath());
-    Picasso.get()
-            .load(uri)
-            .into(movieImage);
+      Picasso.get()
+              .load(uri)
+              .into(movieImage);
 
     apiService = APIUtility.getAPIService();
 

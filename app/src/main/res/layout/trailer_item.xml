@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="250dp">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tv_movie_trailer_text"
@@ -16,11 +16,10 @@
     <ImageView
         android:id="@+id/iv_movie_trailer_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="200dp"
         android:layout_margin="8dp"
-        android:scaleType="center"
+        android:scaleType="centerCrop"
         android:contentDescription="@string/content_description_trailer" />
-
 
 
 </LinearLayout>
