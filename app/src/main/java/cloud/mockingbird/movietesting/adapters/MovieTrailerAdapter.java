@@ -22,9 +22,9 @@ public class MovieTrailerAdapter extends RecyclerView.Adapter<MovieTrailerAdapte
 
     private static final String TAG = MovieTrailerAdapter.class.getSimpleName();
 
-    private Context context;
     private List<MovieTrailer> movieTrailerData;
     private final MoviePosterAdapter.MoviePosterAdapterOnClickHandler clickHandler;
+    private Context context;
 
    public interface MovieTrailerAdapterOnClickHandler{
        void onClick(int movieTrailerSelected);
@@ -35,10 +35,10 @@ public class MovieTrailerAdapter extends RecyclerView.Adapter<MovieTrailerAdapte
 //        this.clickHandler = clickHandler;
 //    }
 
-    public MovieTrailerAdapter(Context context, List<MovieTrailer> movies, MoviePosterAdapter.MoviePosterAdapterOnClickHandler clickHandler){
-       this.context = context;
+    public MovieTrailerAdapter(List<MovieTrailer> movies, MoviePosterAdapter.MoviePosterAdapterOnClickHandler clickHandler, Context context){
        this.movieTrailerData = movies;
        this.clickHandler = clickHandler;
+       this.context = context;
     }
 
     public class MovieTrailerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

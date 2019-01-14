@@ -77,6 +77,8 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
     movieReleaseDate = (TextView) findViewById(R.id.tv_movie_release_date);
     movieRating = (TextView) findViewById(R.id.tv_movie_vote_average);
     movieDescription = (TextView) findViewById(R.id.tv_movie_plot);
+    trailerRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_reviews);
+    reviewRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_trailers);
 
     Intent intent = getIntent();
     MoviePoster poster = intent.getParcelableExtra("moviePoster");
@@ -93,11 +95,14 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
             .into(movieImage);
 
     apiService = APIUtility.getAPIService();
-    movieTrailerAdapter = new MovieTrailerAdapter(this, new ArrayList<MovieTrailer>(0), this);
-    movieReviewAdapter = new MovieReviewAdapter(this, new ArrayList<MovieReview>(0));
 
-    trailerLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
-    reviewLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
+    movieTrailerAdapter = new MovieTrailerAdapter(new ArrayList<MovieTrailer>(0), this, this);
+    trailerLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+    trailerRecyclerView.setAdapter(movieTrailerAdapter);
+
+    movieReviewAdapter = new MovieReviewAdapter(new ArrayList<MovieReview>(0), this);
+    reviewLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+    reviewRecyclerView.setAdapter(movieReviewAdapter);
 
 
     fetchTrailers();
@@ -152,6 +157,7 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
       public void onResponse(Call<MovieTrailerResults> call, Response<MovieTrailerResults> response) {
         if(response.body() != null){
           trailers = response.body().getResults();
+          movieTrailerAdapter.setTrailerData(trailers);
 //          getTrailers(trailers);
           trailerRecyclerView.setAdapter(movieTrailerAdapter);
           trailerRecyclerView.setLayoutManager(trailerLayoutManager);
@@ -175,6 +181,7 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
       public void onResponse(Call<MovieReviewResults> call, Response<MovieReviewResults> response) {
         if(response.body() != null){
           reviews = response.body().getResults();
+          movieReviewAdapter.setMovieReviewData(reviews);
 //          getReviews(reviews);
           reviewRecyclerView.setAdapter(movieReviewAdapter);
           reviewRecyclerView.setLayoutManager(reviewLayoutManager);
@@ -191,20 +198,20 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
   }
 
   private void getTrailers(List<MovieTrailer> trailers){
-    MovieTrailerAdapter adapter = new MovieTrailerAdapter(this, trailers, this);
-    trailerRecyclerView.setAdapter(adapter);
-    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
-    trailerRecyclerView.setLayoutManager(layoutManager);
-    trailerRecyclerView.setHasFixedSize(true);
-    adapter.notifyDataSetChanged();
+//    MovieTrailerAdapter adapter = new MovieTrailerAdapter(trailers, this, this);
+//    trailerRecyclerView.setAdapter(adapter);
+//    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+//    trailerRecyclerView.setLayoutManager(layoutManager);
+//    trailerRecyclerView.setHasFixedSize(true);
+//    adapter.notifyDataSetChanged();
   }
 
   private void getReviews(List<MovieReview> reviews){
-    MovieReviewAdapter adapter = new MovieReviewAdapter(this, reviews);
-    reviewRecyclerView.setAdapter(adapter);
-    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-    reviewRecyclerView.setLayoutManager(layoutManager);
-    adapter.notifyDataSetChanged();
+//    MovieReviewAdapter adapter = new MovieReviewAdapter(this, reviews);
+//    reviewRecyclerView.setAdapter(adapter);
+//    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+//    reviewRecyclerView.setLayoutManager(layoutManager);
+//    adapter.notifyDataSetChanged();
   }
 
 

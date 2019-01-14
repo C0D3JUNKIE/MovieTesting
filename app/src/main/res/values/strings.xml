@@ -33,6 +33,7 @@
 
     <string name="trailer_header">Trailers</string>
     <string name="no_trailers">This movie does not have any trailers.</string>
+    <string name="content_description_trailer">Movie Trailer</string>
 
     <string name="review_header">Reviews</string>
     <string name="no_reviews">This movie does not have any reviews.</string>

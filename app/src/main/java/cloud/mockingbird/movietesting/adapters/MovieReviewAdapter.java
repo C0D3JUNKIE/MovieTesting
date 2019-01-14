@@ -18,16 +18,16 @@ public class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.
 
     private static final String TAG = MovieReviewAdapter.class.getSimpleName();
 
-    private Context context;
     private List<MovieReview> movieReviewData;
+    private Context context;
 
 //    public interface MovieReviewAdapterOnClickHandler{
 //        void onClick(int movieReviewSelected);
 //    }
 
-    public MovieReviewAdapter(Context context, List<MovieReview> movies){
-        this.context = context;
+    public MovieReviewAdapter(List<MovieReview> movies, Context context){
         this.movieReviewData = movies;
+        this.context = context;
     }
 
 //    public class MovieReviewAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
