@@ -33,17 +33,19 @@ public class MovieDbProvider extends ContentProvider {
     public Cursor query(@androidx.annotation.NonNull @NonNull Uri uri, @androidx.annotation.Nullable @Nullable String[] projection, @androidx.annotation.Nullable @Nullable String selection, @androidx.annotation.Nullable @Nullable String[] selectionArgs, @androidx.annotation.Nullable @Nullable String sortOrder) {
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
         int matcher = URI_MATCHER.match(uri);
-        Cursor cursor = null;
+        Cursor cursor;
         switch(matcher){
             case FAVORITES:
                 cursor = db.query(MovieDbContract.MovieEntity.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder );
                 break;
             case FAVORITES_BY_ID:
+                String id = uri.getPathSegments().get(1);
                 cursor = db.query(MovieDbContract.MovieEntity.TABLE_NAME, projection, "movie_id=?", new String[]{id}, null, null, sortOrder );
                 break;
             default:
                 throw new UnsupportedOperationException("*****    INCORRECT DB URI     *******    = " + uri);
         }
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
@@ -57,7 +59,15 @@ public class MovieDbProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@androidx.annotation.NonNull @NonNull Uri uri) {
-        return null;
+        int match = URI_MATCHER.match(uri);
+        switch (match){
+            case FAVORITES:
+                return MovieDbContract.MovieEntity.MOVIE_LIST;
+            case FAVORITES_BY_ID:
+                return MovieDbContract.MovieEntity.MOVIE_INDIVIDUAL;
+            default:
+                throw new IllegalStateException("*** INCORRECT URI " + uri + " did not match id: " + match + " ***");
+        }
     }
 
     @androidx.annotation.Nullable

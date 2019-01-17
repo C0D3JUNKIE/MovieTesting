@@ -1,8 +1,10 @@
-package cloud.mockingbird.movietesting;
+package cloud.mockingbird.movietesting.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+
+import cloud.mockingbird.movietesting.R;
 
 
 public class SettingsActivity extends AppCompatActivity {

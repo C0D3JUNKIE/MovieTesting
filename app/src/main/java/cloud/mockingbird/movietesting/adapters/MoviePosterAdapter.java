@@ -8,13 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import cloud.mockingbird.movietesting.MainActivity;
 import cloud.mockingbird.movietesting.R;
 import cloud.mockingbird.movietesting.model.MoviePoster;
 

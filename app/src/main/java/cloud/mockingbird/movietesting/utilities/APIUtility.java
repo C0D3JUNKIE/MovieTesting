@@ -3,7 +3,7 @@ package cloud.mockingbird.movietesting.utilities;
 import android.util.Log;
 
 import cloud.mockingbird.movietesting.BuildConfig;
-import cloud.mockingbird.movietesting.RetrofitClientInstance;
+import cloud.mockingbird.movietesting.retrofit.RetrofitClientInstance;
 import cloud.mockingbird.movietesting.interfaces.APIService;
 
 public class APIUtility {
@@ -34,62 +34,5 @@ public class APIUtility {
     Log.d(LOG_TAG, "****    getAPIService: Retrofit call to client instance and api service    *****");
     return RetrofitClientInstance.getRetrofitInstance(DEFAULT_URL).create(APIService.class);
   }
-
-//  /**
-//   * Please note these methods are cookie cutter methods from Google/Udacity's Sunshine Project.
-//   *
-//   * @param context
-//   * @param params
-//   * @return URL
-//   */
-//  public static URL buildUrl(Context context, String params){
-//
-//    Uri builtUri = Uri.parse(DEFAULT_URL)
-//        .buildUpon()
-//        .appendPath(params)
-//        .appendQueryParameter(KEY_PARAM, APIKEY)
-//        .appendQueryParameter("language", LANG_PARAM)
-//        .appendQueryParameter("page", PAGE_PARAM)
-//        .build();
-//    URL url = null;
-//
-//    try{
-//      url = new URL(builtUri.toString());
-//    }catch(MalformedURLException e){
-//      e.printStackTrace();
-//    }
-//
-//    Log.v(LOG_TAG, "Built URI " + url);
-//
-//    return url;
-//
-//  }
-//
-//  /**
-//   * Please note these methods are cookie cutter methods from Google/Udacity's Sunshine Project.
-//   *
-//   * @param url  URL to fetch response from
-//   * @return Contents of HTTP response
-//   * @throws IOException For network response
-//   */
-//  public static String getResponseFromHttpURL(URL url) throws IOException {
-//
-//    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-//
-//    try{
-//      InputStream in = urlConnection.getInputStream();
-//      Scanner scanner = new Scanner(in);
-//      scanner.useDelimiter("\\A");
-//
-//      if(scanner.hasNext()){
-//        return scanner.next();
-//      }else{
-//        return null;
-//      }
-//    }finally{
-//      urlConnection.disconnect();
-//    }
-//
-//  }
 
 }

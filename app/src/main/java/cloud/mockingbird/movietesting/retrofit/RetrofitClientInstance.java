@@ -1,6 +1,8 @@
-package cloud.mockingbird.movietesting;
+package cloud.mockingbird.movietesting.retrofit;
 
 import android.util.Log;
+
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -18,11 +20,6 @@ public class RetrofitClientInstance {
 
     //Retrofit get method
     public static Retrofit getRetrofitInstance(String baseUrl){
-
-        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        clientBuilder.addInterceptor(loggingInterceptor);
 
         if(retrofit == null){
             retrofit = new Retrofit.Builder()

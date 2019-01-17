@@ -9,7 +9,7 @@
     <android.support.constraint.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="cloud.mockingbird.movietesting.DetailActivity">
+        tools:context="cloud.mockingbird.movietesting.activities.DetailActivity">
 
         <TextView
             android:id="@+id/tv_movie_title"
@@ -35,8 +35,9 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_movie_title" />
 
         <android.support.design.widget.FloatingActionButton
-            android:layout_width="68dp"
-            android:layout_height="60dp"
+            android:id="@+id/button_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="16dp"
@@ -45,12 +46,11 @@
             android:background="@color/colorAccentVariant"
             android:clickable="true"
             android:focusable="true"
-            android:scaleType="centerInside"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.307"
             app:layout_constraintStart_toEndOf="@+id/linearLayout"
             app:layout_constraintTop_toBottomOf="@+id/tv_movie_title"
-            app:srcCompat="@drawable/ic_heart_outline" />
+            app:srcCompat="@drawable/baseline_favorite_border_black_36dp" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -142,8 +142,6 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
-                android:clipChildren="false"
-                android:clipToPadding="false"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toTopOf="@+id/tv_review_header"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -166,7 +164,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_movie_reviews"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"

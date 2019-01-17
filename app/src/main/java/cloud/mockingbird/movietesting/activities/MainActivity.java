@@ -1,4 +1,4 @@
-package cloud.mockingbird.movietesting;
+package cloud.mockingbird.movietesting.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,8 +17,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.facebook.stetho.Stetho;
-
+import cloud.mockingbird.movietesting.R;
 import cloud.mockingbird.movietesting.adapters.MoviePosterAdapter;
 import cloud.mockingbird.movietesting.data.MoviePreferences;
 import cloud.mockingbird.movietesting.interfaces.APIService;
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Stetho.initializeWithDefaults(this);
+//    Stetho.initializeWithDefaults(this);
     setContentView(R.layout.activity_main);
 
     //Declaration and initialization of API Service

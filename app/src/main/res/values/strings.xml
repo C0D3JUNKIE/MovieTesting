@@ -40,4 +40,12 @@
     <string name="review_author">Example Author</string>
     <string name="review_content">Example of the review content.</string>
 
+
+    <string name="db_insert_confirmation">Favorite saved successfully.</string>
+    <string name="db_insert_error">Database insert failed!</string>
+    <string name="db_delete_confirmation">Favorite was removed.</string>
+    <string name="db_delete_error">Database delete failed!</string>
+
+    <string name="favorite_header">Favorite Movies</string>
+
 </resources>

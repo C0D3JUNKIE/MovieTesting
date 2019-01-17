@@ -1,8 +1,11 @@
-package cloud.mockingbird.movietesting;
+package cloud.mockingbird.movietesting.activities;
 
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,16 +15,20 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cloud.mockingbird.movietesting.R;
 import cloud.mockingbird.movietesting.adapters.MoviePosterAdapter;
 import cloud.mockingbird.movietesting.adapters.MovieReviewAdapter;
 import cloud.mockingbird.movietesting.adapters.MovieTrailerAdapter;
+import cloud.mockingbird.movietesting.data.MovieDbContract;
 import cloud.mockingbird.movietesting.interfaces.APIService;
 import cloud.mockingbird.movietesting.model.MoviePoster;
 import cloud.mockingbird.movietesting.model.MovieReview;
@@ -40,9 +47,8 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
 
   private ImageView movieImage;
   private ImageView movieTrailerImage;
-
   private String movieId;
-
+  private boolean favorite = false;
   private TextView movieTitle;
   private TextView movieReleaseDate;
   private TextView movieRating;
@@ -50,15 +56,12 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
   private TextView movieTrailerText;
   private TextView reviewAuthor;
   private TextView reviewContents;
-
   private MoviePoster moviePoster;
   private MovieTrailer movieTrailer;
   private MovieReview movieReview;
-
-  private  FloatingActionButton fabButton;
-
+  private ProgressBar progressBar;
+  private FloatingActionButton fabButton;
   private APIService apiService;
-
   private List<MovieTrailer> trailers;
   private List<MovieReview> reviews;
   private MovieTrailerAdapter movieTrailerAdapter;
@@ -79,18 +82,26 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
 //    Stetho.initializeWithDefaults(this);
     setContentView(R.layout.activity_detail);
 
+    progressBar = (ProgressBar) findViewById(R.id.pb_loading_indicator);
     movieImage = (ImageView) findViewById(R.id.iv_movie_poster_image);
     movieTrailerImage = (ImageView) findViewById(R.id.iv_movie_trailer_image);
-
     movieTitle = (TextView) findViewById(R.id.tv_movie_title);
     movieReleaseDate = (TextView) findViewById(R.id.tv_movie_release_date);
     movieRating = (TextView) findViewById(R.id.tv_movie_vote_average);
     movieDescription = (TextView) findViewById(R.id.tv_movie_plot);
     reviewAuthor = (TextView) findViewById(R.id.tv_review_author);
     reviewContents = (TextView) findViewById(R.id.tv_review_content);
-
     trailerRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_reviews);
     reviewRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_trailers);
+    fabButton = (FloatingActionButton) findViewById(R.id.button_favorite);
+
+//    if(getIntent() != null && getIntent().hasExtra("movie")){
+//      moviePoster = getIntent().getParcelableExtra("movie");
+//    }
+//
+//    if(moviePoster != null){
+//
+//    }
 
     Intent intent = getIntent();
     MoviePoster poster = intent.getParcelableExtra("moviePoster");
@@ -107,20 +118,31 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
               .into(movieImage);
 
     apiService = APIUtility.getAPIService();
+    toggleFavorite();
 
     movieTrailerAdapter = new MovieTrailerAdapter(new ArrayList<MovieTrailer>(0), this, this);
     trailerLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
     trailerRecyclerView.setAdapter(movieTrailerAdapter);
+    trailerRecyclerView.setLayoutManager(trailerLayoutManager);
+    trailerRecyclerView.setHasFixedSize(true);
 
     movieReviewAdapter = new MovieReviewAdapter(new ArrayList<MovieReview>(0), this);
     reviewLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
     reviewRecyclerView.setAdapter(movieReviewAdapter);
-
+    reviewRecyclerView.setLayoutManager(reviewLayoutManager);
+    reviewRecyclerView.setHasFixedSize(true);
 
     fetchTrailers();
     fetchReviews();
 
-
+//    new queryDb().execute();
+//
+//    fabButton.setOnClickListener(new View.OnClickListener() {
+//      @Override
+//      public void onClick(View v) {
+//        toggleFavorite();
+//      }
+//    });
 
   }
 
@@ -149,16 +171,20 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
 
   }
 
-  /**
-   *
-   * @param menu
-   * @return
-   */
+
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu, menu);
     MenuItem menuItem = menu.findItem(R.id.action_refresh);
     return super.onCreateOptionsMenu(menu);
+  }
+
+  private void toggleFavorite(){
+    if(!favorite){
+      fabButton.setImageResource(R.drawable.ic_heart_outline);
+    }else{
+      fabButton.setImageResource(R.drawable.ic_heart);
+    }
   }
 
   private void fetchTrailers(){
@@ -170,12 +196,7 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
         if(response.body() != null){
           trailers = response.body().getResults();
           movieTrailerAdapter.setTrailerData(trailers);
-//          getTrailers(trailers);
-          trailerRecyclerView.setAdapter(movieTrailerAdapter);
-          trailerRecyclerView.setLayoutManager(trailerLayoutManager);
-          trailerRecyclerView.setHasFixedSize(true);
           movieTrailerAdapter.notifyDataSetChanged();
-
         }
       }
 
@@ -194,10 +215,6 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
         if(response.body() != null){
           reviews = response.body().getResults();
           movieReviewAdapter.setMovieReviewData(reviews);
-//          getReviews(reviews);
-          reviewRecyclerView.setAdapter(movieReviewAdapter);
-          reviewRecyclerView.setLayoutManager(reviewLayoutManager);
-          reviewRecyclerView.setHasFixedSize(true);
           movieReviewAdapter.notifyDataSetChanged();
         }
       }
@@ -209,21 +226,70 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
     });
   }
 
-  private void getTrailers(List<MovieTrailer> trailers){
-//    MovieTrailerAdapter adapter = new MovieTrailerAdapter(trailers, this, this);
-//    trailerRecyclerView.setAdapter(adapter);
-//    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
-//    trailerRecyclerView.setLayoutManager(layoutManager);
-//    trailerRecyclerView.setHasFixedSize(true);
-//    adapter.notifyDataSetChanged();
+  private void insert2Db(){
+    favorite =  true;
+    String id = moviePoster.getMovieId();
+    String title = moviePoster.getMovieTitle();
+    String release_date = moviePoster.getMovieReleaseDate();
+    String vote_average = moviePoster.getMovieRating();
+    String description = moviePoster.getMovieDescription();
+    String poster_path = moviePoster.getMovieImagePath();
+
+    ContentValues contentValues = new ContentValues();
+    contentValues.put(MovieDbContract.MovieEntity.COLUMN_MOVIE_ID, id);
+    contentValues.put(MovieDbContract.MovieEntity.COLUMN_TITLE, title);
+    contentValues.put(MovieDbContract.MovieEntity.COLUMN_RELEASE_DATE, release_date);
+    contentValues.put(MovieDbContract.MovieEntity.COLUMN_VOTE_AVERAGE, vote_average);
+    contentValues.put(MovieDbContract.MovieEntity.COLUMN_DESCRIPTION, description);
+    contentValues.put(MovieDbContract.MovieEntity.COLUMN_POSTER, poster_path);
+
+    Uri insertUri = getContentResolver().insert(MovieDbContract.MovieEntity.BUILT_URI, contentValues);
+
+    if(insertUri == null){
+      String failed = String.format(getResources().getString(R.string.db_insert_error));
+      Toast.makeText(this, failed, Toast.LENGTH_SHORT).show();
+    }else{
+      String confirmation = String.format(getResources().getString(R.string.db_insert_confirmation));
+      Toast.makeText(this, confirmation, Toast.LENGTH_SHORT).show();
+    }
+
   }
 
-  private void getReviews(List<MovieReview> reviews){
-//    MovieReviewAdapter adapter = new MovieReviewAdapter(this, reviews);
-//    reviewRecyclerView.setAdapter(adapter);
-//    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-//    reviewRecyclerView.setLayoutManager(layoutManager);
-//    adapter.notifyDataSetChanged();
+  private void deleteFromDb(){
+    favorite = false;
+    Uri deleteUri = MovieDbContract.BASE_CONTENT_URI.buildUpon().appendPath(MovieDbContract.FAVORITE_PATH).appendPath(movieId).build();
+
+    int row = getContentResolver().delete(deleteUri, null, null);
+    if(row == 0){
+      String failed = String.format(getResources().getString(R.string.db_delete_error));
+      Toast.makeText(this, failed, Toast.LENGTH_SHORT).show();
+    }else{
+      String confirmation = String.format(getResources().getString(R.string.db_delete_confirmation));
+      Toast.makeText(this, confirmation, Toast.LENGTH_SHORT).show();
+    }
+
+  }
+
+  private class queryDb extends AsyncTask<Void, Void, Cursor>{
+    @Override
+    protected void onPostExecute(Cursor cursor) {
+      super.onPostExecute(cursor);
+      if (cursor.getCount() > 0) {
+        favorite=true;
+        toggleFavorite();
+      }else{
+        favorite=false;
+        toggleFavorite();
+      }
+    }
+
+    @Override
+    protected Cursor doInBackground(Void... voids) {
+      Uri uri = MovieDbContract.MovieEntity.BUILT_URI;
+      String selected = MovieDbContract.MovieEntity.COLUMN_MOVIE_ID + "=?";
+      String[] args = new String[]{movieId};
+      return getContentResolver().query(uri, null, selected, args, null);
+    }
   }
 
 
