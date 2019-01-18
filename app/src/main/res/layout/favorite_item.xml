@@ -12,9 +12,12 @@
         android:layout_width="150dp"
         android:layout_height="190dp"
         android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/movie_poster_content_description"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -25,6 +28,8 @@
         android:layout_marginLeft="8dp"
         android:gravity="center"
         android:text="Movie Title"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/favorite_movie_poster"
         tools:layout_editor_absoluteY="16dp" />
 
